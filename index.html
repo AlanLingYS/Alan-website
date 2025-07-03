@@ -3,61 +3,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Show Image on Button Click</title>
+  <title>My Colorful Website with Tabs</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       max-width: 700px;
       margin: 40px auto;
       padding: 0 20px;
-      background-color: #f4f4f4;
-      color: #333;
+      background: linear-gradient(135deg, #f0c27b, #4b1248);
+      color: #fff;
       text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
-    h1 {
-      color: #2c3e50;
+    h1, h2 {
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
-    button {
-      margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 1rem;
+    /* Tabs container */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+    .tab {
+      padding: 10px 25px;
+      background: #6a0dad;
       cursor: pointer;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    img.profile {
-      max-width: 200px;
-      border-radius: 50%;
-      margin-top: 20px;
-      display: none; /* initially hidden */
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      transition: opacity 0.5s ease-in-out;
+    .tab:hover {
+      background: #9b4dca;
     }
-    img.profile.show {
+    .tab.active {
+      background: #ff6f91;
+      color: #3a003a;
+      box-shadow: 0 6px 8px rgba(255,111,145,0.7);
+    }
+    /* Tab content */
+    .tab-content {
+      display: none;
+      text-align: left;
+      background: rgba(255,255,255,0.15);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+      color: #fff;
+      min-height: 180px;
+    }
+    .tab-content.active {
       display: block;
-      opacity: 1;
+    }
+    /* Show More button */
+    #showMoreBtn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background-color: #ff6f91;
+      border: none;
+      border-radius: 20px;
+      color: #3a003a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 5px rgba(255,111,145,0.5);
+    }
+    #showMoreBtn:hover {
+      background-color: #ff4c6d;
+    }
+    /* Toggle image buttons */
+    #toggleImageBtn, #toggleYardBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #6a0dad;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
+      display: block;
+      width: 100%;
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #toggleImageBtn:hover, #toggleYardBtn:hover {
+      background-color: #9b4dca;
+    }
+    /* Images style */
+    #cdeImage, #abcImage {
+      display: none;
+      margin-top: 20px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+      border: 3px solid #ff6f91;
     }
   </style>
 </head>
 <body>
-  <h1>Hello, I’m Alan Ling</h1>
-  <p>Click the button below to see my profile picture.</p>
 
-  <button id="showImageBtn">Show Profile Picture</button>
+  <h1>Welcome to My Colorful Website!</h1>
 
-  <img src="abc.jpg" alt="Profile Photo" class="profile" />
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="about">About Me</div>
+    <div class="tab" data-tab="gallery">Gallery</div>
+  </div>
+
+  <!-- Tab Contents -->
+
+  <!-- About Me tab -->
+  <div id="about" class="tab-content active">
+    <h2>About Me</h2>
+    <p>
+      Hi! I’m Alan Ling, a software engineering student passionate about coding and learning new technologies.
+    </p>
+    <p id="moreText" style="display:none;">
+      I enjoy working on challenging projects, exploring new programming languages, and collaborating with others to build meaningful software. In my free time, I like gaming, reading, and improving my skills.
+    </p>
+    <button id="showMoreBtn">Show More</button>
+  </div>
+
+  <!-- Gallery tab -->
+  <div id="gallery" class="tab-content">
+    <h2>Gallery</h2>
+    
+   <button id="toggleImageBtn">Press here for a photo of me in the award with my principle</button>
+   <img src="cde.jpg" alt="CDE Image" id="cdeImage" style="display:none;" />
+
+   <button id="toggleYardBtn">Press here for my insta</button>
+   <img src="abc.jpg" alt="Award Photo" id="abcImage" style="display:none;" />
+
+  </div>
 
   <script>
-    const btn = document.getElementById('showImageBtn');
-    const img = document.querySelector('.profile');
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
 
-    btn.addEventListener('click', () => {
-      if (img.classList.contains('show')) {
-        img.classList.remove('show');
-        btn.textContent = 'Show Profile Picture';
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and contents
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        // Add active to clicked tab and corresponding content
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Show More toggle
+    const showMoreBtn = document.getElementById('showMoreBtn');
+    const moreText = document.getElementById('moreText');
+    showMoreBtn.addEventListener('click', () => {
+      if (moreText.style.display === 'none') {
+        moreText.style.display = 'block';
+        showMoreBtn.textContent = 'Show Less';
       } else {
-        img.classList.add('show');
-        btn.textContent = 'Hide Profile Picture';
+        moreText.style.display = 'none';
+        showMoreBtn.textContent = 'Show More';
+      }
+    });
+
+    // Toggle gallery image
+    const toggleImageBtn = document.getElementById('toggleImageBtn');
+    const cdeImage = document.getElementById('cdeImage');
+    toggleImageBtn.addEventListener('click', () => {
+      if (cdeImage.style.display === 'none') {
+        cdeImage.style.display = 'block';
+        toggleImageBtn.textContent = 'Hide Image';
+      } else {
+        cdeImage.style.display = 'none';
+        toggleImageBtn.textContent = 'Press here for a photo of me in the award with my principle';
+      }
+    });
+
+    // Toggle award photo image
+    const toggleYardBtn = document.getElementById('toggleYardBtn');
+    const yardImage = document.getElementById('abcImage');
+    toggleYardBtn.addEventListener('click', () => {
+      if (yardImage.style.display === 'none') {
+        yardImage.style.display = 'block';
+        toggleYardBtn.textContent = 'Hide Istagram profile';
+      } else {
+        yardImage.style.display = 'none';
+        toggleYardBtn.textContent = 'Press here for a photo of me in the award with my principle';
       }
     });
   </script>
+
 </body>
 </html>
